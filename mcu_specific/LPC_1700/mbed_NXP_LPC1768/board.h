@@ -29,7 +29,7 @@
 @-------10--------20--------30--------40--------50--------60--------70--------80
 
 /* =======  BOARD =========== */
-Blueboard_1768	= 1		@ ngxtechnologies Blueboard LPC1768-H, LPC1768
+mbed_NXP_LPC1768 = 1		@ NXP mbed LPC1768
 
 /* ======= OPTIONS ========== */
 native_usb	= 1		@ comment out to exclude usb support
