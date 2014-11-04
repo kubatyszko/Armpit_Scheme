@@ -331,6 +331,15 @@ FlashInitCheck: @ return status of flash init enable/override gpio pin (P3.26) i
 	set	pc,  lnk
 .endif
 
+.ifdef mbed_NXP_LPC1768
+_func_
+FlashInitCheck: @ return status of flash init enable/override gpio pin (P3.26) in rva
+		@ pin low = boot override
+	ldr	rva, =io3_base		@ rva <- address of gpio 3 base register
+	ldr	rva, [rva, #io_state]	@ rva <- values of all P3.X
+	and	rva, rva, #0x04000000	@ rva <- status of P3.26 only (return value)
+	set	pc,  lnk
+.endif
 	
 @---------------------------------------------------------------------------------------
 @

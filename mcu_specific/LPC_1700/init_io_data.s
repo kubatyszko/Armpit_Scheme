@@ -120,4 +120,20 @@ lib_sectors:	@ lib shares on-chip file flash
 
 
 
+.ifdef mbed_NXP_LPC1768
+@
+@ Note:	 on some LPC1768 hardware (week 11 to 34, 2010) the sector starting at 0x70000 cannot be written.
+@
+.balign	4
+flashsectors:	@ 16 x 4KB, 14 x 32KB FLASH sectors of LPC1768
+lib_sectors:	@ lib shares on-chip file flash
+.word	0x00000, 0x01000, 0x02000, 0x03000, 0x04000, 0x05000, 0x06000, 0x07000
+.word	0x08000, 0x09000, 0x0A000, 0x0B000, 0x0C000, 0x0D000, 0x0E000, 0x0F000
+.word	0x10000, 0x18000, 0x20000, 0x28000, 0x30000, 0x38000, 0x40000, 0x48000
+.word	0x50000, 0x58000, 0x60000, 0x68000, 0x70000, 0x78000, 0x80000, 0x0FFFFFFC
+.endif	@ .ifdef mbed_NXP_LPC1768
+
+
+
+
 
