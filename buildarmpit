@@ -39,6 +39,7 @@
 # 	./buildarmpit 060 LM_3Sxxxx  TI_EvalBot		 // TI           Evalbot LM3S9B92
 # 	./buildarmpit 060 LPC_1300   LPC_P1343		 // Olimex       LPC-P1343
 # 	./buildarmpit 060 LPC_1700   Blueboard_1768	 // NGX          Blueboard LPC1768-H
+# 	./buildarmpit 060 LPC_1700   mbed_NXP_LPC1768    // NXP          mbed NXP LPC1768
 # 	./buildarmpit 060 STM32F1    STM32_DT_Board	 // InSem/Lodin  STM32-DOT-BOARD
 # 	./buildarmpit 060 STM32F1    STM32_Fractal	 // Fractal MCU32-1.12 Board
 # 	./buildarmpit 060 STM32F1    STM32_H103		 // Olimex       STM32-H103
