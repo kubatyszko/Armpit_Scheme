@@ -38,11 +38,12 @@ enable_MPU	= 1		@ comment this line out to not use the MPU
 
 /* ===== CONFIGURATION ====== */
 @ --------- LEDs -----------
-LEDPINSEL	= PINSEL3	@ board LED control is on PINSEL3
+LEDPINSEL	= PINSEL3	@ board LED control is on PINSEL3 
 LEDIO		= io1_base	@ board LED on/off pins are on IO1PINs
-REDLED		= GRNLED	@ aliased
-YELLED		= GRNLED	@ aliased
-GRNLED		= 0x20000000	@ P1.29
+GRNLED		= 1 << 18 	@ aliased [ LED are on pins 18,20,21,23 ]
+REDLED		= 1 << 20 	@ aliased
+YELLED		= 1 << 21       @ P1.29
+LED4		= 0x2009C020    @ P1.29
 @ --------- SD card ---------
 sd_is_on_spi	= 1		@ SD card uses SPI interface
 sd_spi		= spi0_base	@ SD card is on SPI0 (legacy SPI)

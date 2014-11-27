@@ -57,12 +57,14 @@
 # 	./buildarmpit 060 OMAP_35xx  TI_Beagle_XM	 // TI           Beagle XM rev C
 # ------------------------------------------------------
 
+export PATH="/Volumes/MAIN/DEVEL/gcc-arm-none-eabi-4_8-2014q3/bin/:${PATH}"
+
 #arm-none-eabi-as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
-as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
-ld -Map bin/armpit_$1_$3.map --script bld_link_addresses -o a.elf a.o
+arm-none-eabi-as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
+arm-none-eabi-ld -Map bin/armpit_$1_$3.map --script bld_link_addresses -o a.elf a.o
 # *** uncomment the line below to generate an intel hex file ***
 # arm-none-eabi-objcopy -O ihex   a.elf  bin/armpit_$1_$3.hex
-objcopy -O binary a.elf  bin/armpit_$1_$3.bin
+arm-none-eabi-objcopy -O binary a.elf  bin/armpit_$1_$3.bin
 rm a.o
 rm a.elf
 

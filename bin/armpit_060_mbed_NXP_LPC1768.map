@@ -2,58 +2,58 @@
 Memory Configuration
 
 Name             Origin             Length             Attributes
-*default*        0x00000000         0xffffffff
+*default*        0x0000000000000000 0xffffffffffffffff
 
 Linker script and memory map
 
 
-.text           0x00000000     0xe498
-                0x00000000                _startcode = .
+.text           0x0000000000000000     0xec50
+                0x0000000000000000                _startcode = .
  *(.text)
- .text          0x00000000     0xe498 a.o
-                0x00000000                _start
-                0x0000028e                _code_
-                0x0000e498                _endcode = .
+ .text          0x0000000000000000     0xec50 a.o
+                0x0000000000000000                _start
+                0x0000000000000292                _code_
+                0x000000000000ec50                _endcode = .
 
-.glue_7         0x0000e498        0x0
- .glue_7        0x00000000        0x0 linker stubs
+.glue_7         0x000000000000ec50        0x0
+ .glue_7        0x0000000000000000        0x0 linker stubs
 
-.glue_7t        0x0000e498        0x0
- .glue_7t       0x00000000        0x0 linker stubs
+.glue_7t        0x000000000000ec50        0x0
+ .glue_7t       0x0000000000000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000e498        0x0
- .vfp11_veneer  0x00000000        0x0 linker stubs
+.vfp11_veneer   0x000000000000ec50        0x0
+ .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000e498        0x0
- .v4_bx         0x00000000        0x0 linker stubs
+.v4_bx          0x000000000000ec50        0x0
+ .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x0000e498        0x0
- .iplt          0x00000000        0x0 a.o
+.iplt           0x000000000000ec50        0x0
+ .iplt          0x0000000000000000        0x0 a.o
 
-.data           0x0000b070        0x0
-                0x0000b070                _startdata = .
+.data           0x000000000000b820        0x0
+                0x000000000000b820                _startdata = .
  *(.data)
- .data          0x0000b070        0x0 a.o
-                0x0000b070                _enddata = .
+ .data          0x000000000000b820        0x0 a.o
+                0x000000000000b820                _enddata = .
 
-.igot.plt       0x0000b070        0x0
- .igot.plt      0x00000000        0x0 a.o
+.igot.plt       0x000000000000b820        0x0
+ .igot.plt      0x0000000000000000        0x0 a.o
 
-boot_section    0x00010000        0x0
-                0x00010000                _startboot = .
+boot_section    0x0000000000010000        0x0
+                0x0000000000010000                _startboot = .
  *(boot_section)
- boot_section   0x00010000        0x0 a.o
-                0x00010000                _endboot = .
+ boot_section   0x0000000000010000        0x0 a.o
+                0x0000000000010000                _endboot = .
 LOAD a.o
 OUTPUT(a.elf elf32-littlearm)
 
-.rel.dyn        0x00010000        0x0
- .rel.iplt      0x00000000        0x0 a.o
+.rel.dyn        0x0000000000010000        0x0
+ .rel.iplt      0x0000000000000000        0x0 a.o
 
-.bss            0x00010000        0x0
- .bss           0x00010000        0x0 a.o
+.bss            0x0000000000010000        0x0
+ .bss           0x0000000000010000        0x0 a.o
 
 .ARM.attributes
-                0x00000000       0x21
+                0x0000000000000000       0x21
  .ARM.attributes
-                0x00000000       0x21 a.o
+                0x0000000000000000       0x21 a.o
