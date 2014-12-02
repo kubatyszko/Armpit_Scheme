@@ -211,8 +211,10 @@ lnk	.req r14	@ jump link -- lr
 @
 @-----------------------------------------------------------------------------*/
 
-ALLLED		= REDLED | YELLED | GRNLED
-
+    ALLLED		= REDLED | YELLED | GRNLED
+	
+@
+	
 @
 @ Note:	for stop-and-copy gc, each half-heap's size must be a multiple of 8
 @	bytes. Thus, heaptop1 minus heapbottom must be a multiple of 16 bytes.
