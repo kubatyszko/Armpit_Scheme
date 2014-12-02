@@ -222,52 +222,6 @@ datcp0:	ldmia	r6!, {r11-r12}
 	
 .ifdef	native_usb
 
-.ifdef  onboard_SDFT
-
-  .ifdef sd_is_on_spi
-
-        @ configure pins and SPI peripheral
-        @ SPIn_CR1  <- disable SPIn (clear faults if any)
-        ldr     r6, =sd_spi
-        ldr     r7, [r6, #0x08]         @ SPIn_SR, read to clear fault flags
-        set     r7, #0x00
-        str     r7, [r6, #0x00]         @ SPIn_CR1  <- disable SPIn (clr faults)
-        @ configure CS pin as gpio out
-        ldr     r6, =sd_cs_gpio
-        ldr     r7, [r6, #0x04]         @ r7 <- config pins 8-15
-        bic     r7, r7, #0x0f
-        orr     r7, r7, #0x01           @ r7 <- PA.8 cfg GPIO out,push-pul,10MHz
-        str     r7, [r6, #0x04]
-        @ de-select sd
-        set     r7, #sd_cs
-        str     r7, [r6, #0x14] @ clear CS pin
-        @ de-select inbound SS pin
-        ldr     r6, =sd_spi_gpio
-        ldr     r7, [r6, #0x00]         @ r7 <- config of pins 0-7
-        bic     r7, r7, #0x0f0000
-        orr     r7, r7, #0x080000       @ r7 <- PA.4 (SPI SS) config as input
-        str     r7, [r6, #0x00]
-        set     r7, #(1 << 4)
-        str     r7, [r6, #0x10]         @ set SS pin (PA.4)
-        @ config sck, miso and mosi pins as spi (AF push-pull out, GPIOn_CRL/H)
-        ldr     r7, [r6, #0x00]         @ r7 <- config of pins 0-7
-        bic     r7, r7, #0xff000000
-        bic     r7, r7, #0x00f00000
-        orr     r7, r7, #0xBB000000
-        orr     r7, r7, #0x00B00000     @ r7 <- PA.5,6,7 cfg as AFIO (SPI)
-        str     r7, [r6, #0x00]
-        @ low speed (approx 400KHz)
-        ldr     r6, =sd_spi
-        ldr     r7, [r6, #0x08]         @ SPIn_SR, read to clear fault flags
-        set     r7, #0x00
-        str     r7, [r6, #0x00]         @ SPIn_CR1  <- disab SPIn (clr faults)
-        set     r7, #0x74
-        str     r7, [r6, #0x00]         @ SPIn_CR1 <- PHA0,POL0,8b,Mst,Enab,280K
-
-  .endif @ sd_is_on_spi
-
-.endif @ onboard_SDFT
-
   .ifdef STM32F4_Discov
 	@ check if USB is powered (PA9 OTG_VBUS power pin), otherwise, return
 	ldr	r6,  =ioporta_base
@@ -410,92 +364,9 @@ ersfl0:	ldr	rvb, [rva, #0x0c]		@ rvb <- FLASH_SR
 	set	pc,  lnk			@ return
 
 
-@-------------------------------------------------------------------------------
-@
-@ 2- SD card low-level interface
-@
-@-------------------------------------------------------------------------------
-
-.ifdef  onboard_SDFT
-
-  .ifdef sd_is_on_spi
-
-_func_ 
-sd_cfg: @ configure spi speed (high), phase, polarity
-        @ modifies:     rva, rvb
-        ldr     rva, =sd_spi
-        set     rvb, #0x81
-        str     rvb, [rva, #0x00]       @ SPI_CR <- reset SPI
-        set     rvb, #0x01
-        str     rvb, [rva, #0x00]       @ SPI_CR <- enable SPI
-        set     rvb, #0x01
-        str     rvb, [rva, #0x04]       @ SPI_MR <- enable master mode
-        set     rvb, #(SPI_HS_DIV << 8) @ rvb    <- SCBR, MCK/SPI_HS_DIV~= 12MHz
-        orr     rvb, rvb, #0x02         @ rvb    <- POL/PHA=0
-        str     rvb, [rva, #0x30]       @ SPI_CSR0 <- ~12MHz, POL/PHA=0
-        set     pc,  lnk
-
-_func_
-sd_slo: @ configure spi speed (low), phase, polarity
-        @ modifies:     rva, rvb
-        ldr     rva, =sd_spi
-        set     rvb, #0x81
-        str     rvb, [rva, #0x00]       @ SPI_CR <- reset SPI
-        set     rvb, #0x01
-        str     rvb, [rva, #0x00]       @ SPI_CR <- enable SPI
-        set     rvb, #0x01
-        str     rvb, [rva, #0x04]       @ SPI_MR <- enable master mode
-        set     rvb, #(SPI_LS_DIV << 8) @ rvb    <- SCBR, MCK/SPI_LS_DIV~=400KHz
-        orr     rvb, rvb, #0x02         @ rvb    <- POL/PHA=0
-        str     rvb, [rva, #0x30]       @ SPI_CSR0 <- ~300KHz,POL/PHA=0
-        set     pc,  lnk
-
-_func_
-sd_sel: @ select SD-card subroutine
-        @ modifies:     rva, rvb
-.ifdef  sd_cs
-        ldr     rva, =sd_cs_gpio
-        set     rvb, #sd_cs
-        str     rvb, [rva, #io_clear]   @ clear CS pin
-.endif
-        set     pc,  lnk
-
-_func_
-sd_dsl: @ de-select SD-card subroutine
-        @ modifies:     rva, rvb
-.ifdef  sd_cs
-        ldr     rva, =sd_cs_gpio
-        set     rvb, #sd_cs
-        str     rvb, [rva, #io_set]     @ set CS pin
-.endif
-        set     pc,  lnk
-
-_func_
-sd_get: @ sd-spi get sub-routine
-        @ modifies:     rva, rvb
-        set     rvb, #0xff
-_func_
-sd_put: @ sd-spi put sub-routine
-        @ modifies:     rva, rvb
-        ldr     rva, =sd_spi
-        ldr     rva, [rva, #spi_status] @ ssta
-        tst     rva, #spi_txrdy
-        beq     sd_put
-        ldr     rva, =sd_spi
-        and     rvb, rvb, #0xff
-        str     rvb, [rva, #spi_thr]    @ sdtx (sdat)
-sd_gpw: @ wait
-        ldr     rvb, [rva, #spi_status] @ ssta
-        tst     rvb, #spi_rxrdy         @ sdrr
-        beq     sd_gpw
-        ldr     rvb, [rva, #spi_rhr]    @ sdrx (sdat)
-        and     rvb, rvb, #0xff
-        set     pc, lnk
-
-  .endif @ sd_is_on_spi
-
-.endif  @       onboard_SDFT
-
-
 .ltorg
+
+
+
+
 

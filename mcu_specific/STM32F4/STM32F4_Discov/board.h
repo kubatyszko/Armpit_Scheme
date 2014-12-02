@@ -44,19 +44,17 @@ REDLED		= 1 << 14	@ PD.14
 YELLED		= 1 << 13	@ PD.13 -- STAT2 yellow LED on board
 GRNLED		= 1 << 12	@ PD.12 -- STAT1 green  LED on board
 @ --------- SD card ---------
-onboard_SDFT	= 1		@ comment out to exclude SD card file system
-sd_is_on_spi	= 1		@ SD card is on sd/mmc interface
-sd_spi		= spi1_base	@ SD card is on SPI1
-sd_spi_gpio	= ioporta_base	@ SD card SPI1 port A PA4,5,6,7=SS,SCK,MISO,MOSI
-sd_cs_gpio	= ioporta_base	@ SD card chip-select is on IO port A
-sd_cs		= 1 << 8	@ SD card chip-select on PA.8 (the 8 in 1<< 8)
+@onboard_SDFT	= 1		@ comment out to exclude SD card file system
+@sd_is_on_spi	= 1		@ SD card is on sd/mmc interface
+@sd_spi		= spi1_base	@ SD card is on SPI1
+@sd_spi_gpio	= ioporta_base	@ SD card SPI1 port A PA4,5,6,7=SS,SCK,MISO,MOSI
+@sd_cs_gpio	= ioporta_base	@ SD card chip-select is on IO port A
+@sd_cs		= 1 << 8	@ SD card chip-select on PA.8 (the 8 in 1<< 8)
 @ --------- FREQs -----------
 Clock_parms	= 4 | (168 << 6) | (0 << 16) | (1 << 22) | (7 << 24)
 Prescl_parms	= (0 << 4) | (5 << 10) | (4 << 13) | (8 << 16)
 SYSTICK_RELOAD	= 168*10000 - 1	@ systick reload for 10ms interrupts at  168 MHz
 UART0_DIV	= (0x5b<<4 | 1)	@ divisor for 115200 baud at APB2 Clock = 84 MHz
-SPI_LS_DIV     = 360           @ SPI low  speed SCBR: 120 MHz/255 = 470 KHz
-SPI_HS_DIV     = 14            @ SPI high speed SCBR: 120 MHz/10  =  12 MHz
 @ --------- RAM ------------
 RAMBOTTOM	= 0x20000000
 RAMTOP		= 0x2001C000	@ top of STM32F407VC 112 KB SRAM

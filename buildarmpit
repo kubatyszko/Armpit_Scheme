@@ -39,7 +39,7 @@
 # 	./buildarmpit 060 LM_3Sxxxx  TI_EvalBot		 // TI           Evalbot LM3S9B92
 # 	./buildarmpit 060 LPC_1300   LPC_P1343		 // Olimex       LPC-P1343
 # 	./buildarmpit 060 LPC_1700   Blueboard_1768	 // NGX          Blueboard LPC1768-H
-# 	./buildarmpit 060 LPC_1700   mbed_NXP_LPC1768    // NXP          mbed NXP LPC1768
+#       ./buildarmpit 060 LPC_1700   mbed_NXP_LPC1768    // NXP          mbed NXP LPC1768
 # 	./buildarmpit 060 STM32F1    STM32_DT_Board	 // InSem/Lodin  STM32-DOT-BOARD
 # 	./buildarmpit 060 STM32F1    STM32_Fractal	 // Fractal MCU32-1.12 Board
 # 	./buildarmpit 060 STM32F1    STM32_H103		 // Olimex       STM32-H103
@@ -57,11 +57,12 @@
 # 	./buildarmpit 060 OMAP_35xx  TI_Beagle_XM	 // TI           Beagle XM rev C
 # ------------------------------------------------------
 
-arm-none-eabi-as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
-arm-none-eabi-ld -Map bin/armpit_$1_$3.map --script bld_link_addresses -o a.elf a.o
+#arm-none-eabi-as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
+as -Icommon -Imcu_specific/$2 -Imcu_specific/$2/$3 -o a.o armpit_$1.s
+ld -Map bin/armpit_$1_$3.map --script bld_link_addresses -o a.elf a.o
 # *** uncomment the line below to generate an intel hex file ***
 # arm-none-eabi-objcopy -O ihex   a.elf  bin/armpit_$1_$3.hex
-arm-none-eabi-objcopy -O binary a.elf  bin/armpit_$1_$3.bin
+objcopy -O binary a.elf  bin/armpit_$1_$3.bin
 rm a.o
 rm a.elf
 
